@@ -106,6 +106,52 @@
     border-color: var(--rust);
     background: rgba(184,92,56,0.05);
   }
+  .nav-menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .nav-menu-toggle:hover {
+    color: var(--rust);
+    border-color: var(--rust);
+    background: rgba(184,92,56,0.05);
+  }
+  .nav-menu-icon {
+    position: relative;
+    display: block;
+    width: 1rem;
+    height: 0.7rem;
+  }
+  .nav-menu-icon::before,
+  .nav-menu-icon::after,
+  .nav-menu-icon span {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.3s ease, opacity 0.3s ease, top 0.3s ease;
+  }
+  .nav-menu-icon::before { top: 0; }
+  .nav-menu-icon span { top: 50%; transform: translateY(-50%); }
+  .nav-menu-icon::after { top: calc(100% - 1px); }
+  nav.menu-open .nav-menu-icon::before {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+  nav.menu-open .nav-menu-icon span { opacity: 0; }
+  nav.menu-open .nav-menu-icon::after {
+    top: 50%;
+    transform: translateY(-50%) rotate(-45deg);
+  }
 
   /* ── HERO ──────────────────────────────────────── */
   .hero {
@@ -508,25 +554,77 @@
   /* Small mobile */
   @media (max-width: 480px) {
     nav {
-      padding: 0.85rem 4vw;
-      gap: 0.7rem;
+      padding: 0.7rem 4vw;
+      gap: 0.65rem;
+      flex-wrap: nowrap;
     }
     .nav-logo {
-      width: 100%;
-      text-align: center;
+      width: auto;
+      flex: 0 0 auto;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    .nav-links {
+      order: 2;
+      width: auto;
+      flex: 1 1 auto;
+      min-width: 0;
+      gap: 0.75rem;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow: hidden;
+    }
+    .nav-links li:nth-child(n+3) { display: none; }
+    .nav-links li:nth-child(2) a {
+      display: inline-block;
+      padding-right: 1rem;
+      -webkit-mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+    }
+    .nav-menu-toggle {
+      display: inline-flex;
+      order: 3;
+      flex: 0 0 auto;
+      margin-left: auto;
     }
     .theme-toggle {
-      margin: 0 auto;
+      display: none;
+      width: 100%;
+      margin: 0;
       font-size: 0.58rem;
       letter-spacing: 0.14em;
     }
-    .nav-links {
-      gap: 0.8rem 1rem;
+    nav.menu-open {
+      flex-wrap: wrap;
+      align-items: center;
     }
-    .nav-links li:nth-child(n+4) { display: none; }
+    nav.menu-open .nav-links {
+      order: 4;
+      width: 100%;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding-top: 0.9rem;
+      margin-top: 0.15rem;
+      border-top: 1px solid var(--line);
+    }
+    nav.menu-open .nav-links li {
+      display: block !important;
+      width: 100%;
+    }
+    nav.menu-open .nav-links li:nth-child(2) a {
+      padding-right: 0;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    nav.menu-open .theme-toggle {
+      display: block;
+      order: 5;
+    }
 
     h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
-    .hero { padding-top: 154px; }
+    .hero { padding-top: 112px; }
     .hero-left { padding-top: 2.75rem; }
     .hero-tag {
       max-width: 100%;
@@ -562,6 +660,9 @@
     <li><a href="#hobbies">Hobbies</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="nav-menu-toggle" id="navMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
+    <span class="nav-menu-icon"><span></span></span>
+  </button>
   <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">Dark Mode</button>
 </nav>
 
@@ -871,8 +972,16 @@
 </footer>
 
 <script>
+  const nav = document.querySelector('nav');
+  const navMenuToggle = document.getElementById('navMenuToggle');
   const themeToggle = document.getElementById('themeToggle');
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function setMobileMenu(open) {
+    nav.classList.toggle('menu-open', open);
+    navMenuToggle.setAttribute('aria-expanded', String(open));
+    navMenuToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+  }
 
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
@@ -895,6 +1004,18 @@
   mediaQuery.addEventListener('change', event => {
     if (localStorage.getItem('theme-preference')) return;
     applyTheme(event.matches ? 'dark' : 'light');
+  });
+
+  navMenuToggle.addEventListener('click', () => {
+    setMobileMenu(!nav.classList.contains('menu-open'));
+  });
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => setMobileMenu(false));
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 480) setMobileMenu(false);
   });
 
   // PDF download via base64
@@ -982,6 +1103,7 @@
 </script>
 </body>
 </html>
+
 
 
 
