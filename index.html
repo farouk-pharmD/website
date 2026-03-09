@@ -434,6 +434,7 @@
   .skills .sec-name { color: rgba(245,240,232,0.4); }
 
   .skills-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(2rem,5vw,4rem); }
+  .skill-group-wide { grid-column: 1 / -1; }
 
   .skill-group h3 {
     font-family: 'Playfair Display', serif;
@@ -450,6 +451,18 @@
     transition: all 0.3s; cursor: default;
   }
   .pill:hover { border-color: var(--rust); color: var(--rust-light); }
+
+  @media (min-width: 1025px) {
+    .skill-group-wide .skill-pills {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem 0.85rem;
+    }
+
+    .skill-group-wide .pill {
+      width: 100%;
+    }
+  }
 
   /* ── HOBBIES ───────────────────────────────────── */
   .hobbies { background: var(--paper); }
@@ -591,6 +604,7 @@
   @media (max-width: 1024px) {
     .about { grid-template-columns: 1fr; }
     .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .skill-group-wide { grid-column: auto; }
     .hobbies-row { grid-template-columns: repeat(3, 1fr); }
   }
 
@@ -1007,7 +1021,7 @@
       </div>
     </div>
 
-    <div class="skill-group reveal">
+    <div class="skill-group skill-group-wide reveal">
       <h3>Digital Transformation</h3>
       <div class="skill-pills">
         <span class="pill">Healthcare Digitisation</span>
@@ -1253,6 +1267,11 @@
 </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
