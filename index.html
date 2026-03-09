@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="shortcut icon" type="image/x-icon" href="./pharmacy.ico?">
+  <link rel="shortcut icon" type="image/x-icon" href="pharmacy.ico">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Farouk Ashraf — Clinical Pharmacist</title>
@@ -453,13 +453,48 @@
 
   /* Tablet portrait / large mobile */
   @media (max-width: 768px) {
-    nav { padding: 1rem 5vw; }
-    .nav-links { gap: 1.2rem; }
+    nav {
+      padding: 0.9rem 5vw;
+      flex-wrap: wrap;
+      gap: 0.8rem 1rem;
+      align-items: center;
+    }
+    .nav-logo { font-size: 0.96rem; }
+    .nav-links {
+      order: 3;
+      width: 100%;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .theme-toggle {
+      margin-left: auto;
+      padding: 0.65rem 0.8rem;
+    }
 
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 5rem 6vw 3rem; }
-    .hero-right { min-height: 55vw; }
+    .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 116px; }
+    .hero-left { padding: 3.5rem 6vw 2.5rem; }
+    .hero-right {
+      min-height: auto;
+      justify-content: flex-start;
+      padding: 2rem 1.25rem 1.25rem;
+      gap: 1.5rem;
+    }
     .hero-glyph { font-size: clamp(4rem, 18vw, 8rem); }
+    .hero-portrait-wrap {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .hero-portrait {
+      width: clamp(150px, 42vw, 210px);
+      height: clamp(150px, 42vw, 210px);
+    }
 
     .hobbies-row { grid-template-columns: repeat(2, 1fr); }
     .hobby { border-bottom: 1px solid var(--line); }
@@ -472,9 +507,41 @@
 
   /* Small mobile */
   @media (max-width: 480px) {
+    nav {
+      padding: 0.85rem 4vw;
+      gap: 0.7rem;
+    }
+    .nav-logo {
+      width: 100%;
+      text-align: center;
+    }
+    .theme-toggle {
+      margin: 0 auto;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+    }
+    .nav-links {
+      gap: 0.8rem 1rem;
+    }
     .nav-links li:nth-child(n+4) { display: none; }
+
     h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
-    .hero-stats { grid-template-columns: repeat(3,1fr); }
+    .hero { padding-top: 154px; }
+    .hero-left { padding-top: 2.75rem; }
+    .hero-tag {
+      max-width: 100%;
+      line-height: 1.5;
+      white-space: normal;
+    }
+    .hero-actions > * {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+    .hero-right {
+      padding: 1.5rem 1rem 1rem;
+    }
+    .hero-stats { grid-template-columns: 1fr; }
     .stat-num { font-size: 1.1rem; }
     .stat-label { font-size: 0.48rem; letter-spacing: 0.1em; }
     section { padding: 3.5rem 5vw; }
@@ -915,3 +982,6 @@
 </script>
 </body>
 </html>
+
+
+
