@@ -695,9 +695,13 @@
     .theme-toggle {
       order: 3;
       flex: 0 0 auto;
-      width: 2.2rem;
-      height: 2.2rem;
+      width: 2.35rem;
+      height: 2.35rem;
       margin: 0;
+    }
+    .theme-toggle-track {
+      width: 1.62rem;
+      height: 1.62rem;
     }
     .nav-menu-toggle {
       display: inline-flex;
@@ -729,11 +733,14 @@
     nav.menu-open .nav-links li:nth-child(3) a {
       width: auto;
       padding-right: 0;
+      overflow: visible;
       -webkit-mask-image: none;
       mask-image: none;
     }
     nav.menu-open .nav-label-full { display: inline; }
     nav.menu-open .nav-label-short { display: none; }
+    nav.menu-open .nav-links li:nth-child(3) .nav-label-full { display: inline; }
+    nav.menu-open .nav-links li:nth-child(3) .nav-label-short { display: none; }
 
     h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
     .hero { padding-top: 112px; }
@@ -1225,6 +1232,9 @@
 </script>
 </body>
 </html>
+
+
+
 
 
 
