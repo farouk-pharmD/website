@@ -89,22 +89,78 @@
   .nav-links a:hover { color: var(--rust); }
   .nav-links a:hover::after { width: 100%; }
   .theme-toggle {
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid var(--line);
     background: transparent;
     color: var(--ink);
-    padding: 0.7rem 0.9rem;
     cursor: pointer;
     font-family: inherit;
-    transition: color 0.3s, border-color 0.3s, background 0.3s;
-    white-space: nowrap;
+    padding: 0;
+    border-radius: 999px;
+    transition: color 0.3s, border-color 0.3s, background 0.3s, transform 0.25s ease, box-shadow 0.25s ease;
   }
   .theme-toggle:hover {
     color: var(--rust);
     border-color: var(--rust);
     background: rgba(184,92,56,0.05);
+    transform: translateY(-1px) rotate(8deg);
+    box-shadow: 0 8px 18px rgba(14,13,11,0.08);
+  }
+  .theme-toggle:active {
+    transform: scale(0.92) rotate(-6deg);
+  }
+  .theme-toggle-track {
+    position: relative;
+    width: 1.15rem;
+    height: 1.15rem;
+    display: block;
+  }
+  .theme-toggle-sun,
+  .theme-toggle-moon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+  }
+  .theme-toggle-sun::before,
+  .theme-toggle-moon::before {
+    content: '';
+    display: block;
+  }
+  .theme-toggle-sun::before {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 -0.45rem 0 -0.24rem currentColor, 0 0.45rem 0 -0.24rem currentColor, 0.45rem 0 0 -0.24rem currentColor, -0.45rem 0 0 -0.24rem currentColor, 0.32rem 0.32rem 0 -0.24rem currentColor, -0.32rem -0.32rem 0 -0.24rem currentColor, 0.32rem -0.32rem 0 -0.24rem currentColor, -0.32rem 0.32rem 0 -0.24rem currentColor;
+  }
+  .theme-toggle-moon::before {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  html[data-theme="light"] .theme-toggle-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  html[data-theme="light"] .theme-toggle-moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+  html[data-theme="dark"] .theme-toggle-sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.4);
+  }
+  html[data-theme="dark"] .theme-toggle-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
   }
   .nav-menu-toggle {
     display: none;
@@ -555,51 +611,57 @@
   @media (max-width: 480px) {
     nav {
       padding: 0.7rem 4vw;
-      gap: 0.65rem;
+      gap: 0.55rem;
       flex-wrap: nowrap;
     }
     .nav-logo {
       width: auto;
       flex: 0 0 auto;
       text-align: left;
-      font-size: 0.88rem;
+      font-size: 0.82rem;
     }
     .nav-links {
       order: 2;
       width: auto;
       flex: 1 1 auto;
       min-width: 0;
-      gap: 0.75rem;
-      justify-content: flex-start;
+      gap: 0.7rem;
+      justify-content: center;
       flex-wrap: nowrap;
       overflow: hidden;
     }
-    .nav-links li:nth-child(n+3) { display: none; }
-    .nav-links li:nth-child(2) a {
+    .nav-links li:nth-child(n+4) { display: none; }
+    .nav-links li:nth-child(3) a {
       display: inline-block;
       padding-right: 1rem;
-      -webkit-mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
-      mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, #000 58%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 58%, transparent 100%);
+    }
+    .nav-links a {
+      font-size: 0.54rem;
+      letter-spacing: 0.12em;
+    }
+    .theme-toggle {
+      order: 3;
+      flex: 0 0 auto;
+      width: 2.2rem;
+      height: 2.2rem;
+      margin: 0;
     }
     .nav-menu-toggle {
       display: inline-flex;
-      order: 3;
+      order: 4;
       flex: 0 0 auto;
-      margin-left: auto;
-    }
-    .theme-toggle {
-      display: none;
-      width: 100%;
-      margin: 0;
-      font-size: 0.58rem;
-      letter-spacing: 0.14em;
+      margin-left: 0;
+      width: 2.2rem;
+      height: 2.2rem;
     }
     nav.menu-open {
       flex-wrap: wrap;
       align-items: center;
     }
     nav.menu-open .nav-links {
-      order: 4;
+      order: 5;
       width: 100%;
       flex-basis: 100%;
       flex-direction: column;
@@ -613,14 +675,10 @@
       display: block !important;
       width: 100%;
     }
-    nav.menu-open .nav-links li:nth-child(2) a {
+    nav.menu-open .nav-links li:nth-child(3) a {
       padding-right: 0;
       -webkit-mask-image: none;
       mask-image: none;
-    }
-    nav.menu-open .theme-toggle {
-      display: block;
-      order: 5;
     }
 
     h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
@@ -663,7 +721,12 @@
   <button class="nav-menu-toggle" id="navMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
     <span class="nav-menu-icon"><span></span></span>
   </button>
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">Dark Mode</button>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+    <span class="theme-toggle-track" aria-hidden="true">
+      <span class="theme-toggle-sun"></span>
+      <span class="theme-toggle-moon"></span>
+    </span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -985,7 +1048,7 @@
 
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    themeToggle.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
     themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 
@@ -1103,6 +1166,10 @@
 </script>
 </body>
 </html>
+
+
+
+
 
 
 
