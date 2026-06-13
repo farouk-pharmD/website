@@ -169,7 +169,7 @@
     border-radius: 999px;
     cursor: pointer;
     background: transparent;
-    color: var(--rust-light);
+    color: var(--ink);
     user-select: none;
   }
   .audio-visualizer-node:hover {
@@ -281,7 +281,7 @@
     appearance: none;
     width: 100%;
     height: 3px;
-    background: var(--rust);
+    background: var(--line);
     border-radius: 2px;
     outline: none;
     cursor: pointer;
@@ -536,11 +536,11 @@
     color: rgba(245,240,232,0.4); margin-top: 0.4rem; display: block;
   }
 
-  /* ── GIZA TRIAD LATTICE (NESTED BACKGROUND LAYER) ── */
+  /* ── GIZA TRIAD RESPONSIVE REFINEMENT LATTICE ── */
   .sacred-geometry {
     position: absolute;
     inset: 0;
-    opacity: 0.1;
+    opacity: 0.14;
     pointer-events: none;
     z-index: 1;
   }
@@ -882,7 +882,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.1;
+    opacity: 0.14;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -1335,7 +1335,7 @@
     .about-cards { grid-template-columns: 1fr; }
   }
 
-  /* Small mobile */
+  /* Small mobile adaptive layout system */
   @media (max-width: 480px) {
     nav {
       padding: 0.7rem 4vw;
@@ -1365,31 +1365,41 @@
       padding-left: 0;
       margin: 0 auto;
     }
-    .nav-links li:nth-child(n+4) { display: none; }
-    .nav-links li {
-      flex: 0 0 auto;
-      min-width: 0;
+    .nav-links li:not(.audio-node-wrapper) { display: none; }
+    
+    /* Reposition audio node container context for mobile screens */
+    .nav-links .audio-node-wrapper {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      width: calc(100% - 8vw);
+      max-width: 340px;
     }
-    .nav-links li:nth-child(-n+2) a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      white-space: nowrap;
+    .audio-visualizer-node {
+      width: 100%;
+      justify-content: center;
+      padding: 0.85rem 1.5rem;
+      background: rgba(245, 240, 232, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 32px rgba(14, 13, 11, 0.12);
+      border-color: var(--rust-light);
     }
-    .nav-links li:nth-child(3) a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 3rem;
-      padding-right: 0.8rem;
-      overflow: hidden;
+    html[data-theme="dark"] .audio-visualizer-node {
+      background: rgba(24, 21, 17, 0.95);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
     }
-    .nav-links a {
-      font-size: 0.52rem;
-      letter-spacing: 0.11em;
+    .audio-popup-panel {
+      bottom: calc(100% + 0.6rem);
+      top: auto;
+      width: 100%;
+      transform: translateY(8px);
     }
-    .nav-label-full { display: inline; }
-    .nav-label-short { display: none; }
+    .audio-popup-panel.is-active {
+      transform: translateY(0);
+    }
+
     .theme-toggle {
       order: 3;
       flex: 0 0 auto;
@@ -1434,13 +1444,11 @@
       display: block !important;
       width: 100%;
     }
-    nav.menu-open .nav-links li:nth-child(3) a {
-      width: auto;
-      padding-right: 0;
-      overflow: visible;
+    
+    /* Fixed viewport constraint metrics for native proportions */
+    .sacred-geometry svg {
+      height: 320px;
     }
-    nav.menu-open .nav-label-full { display: inline; }
-    nav.menu-open .nav-label-short { display: none; }
 
     h1 { font-size: clamp(2.6rem, 12vw, 3.5rem); }
     .hero { padding-top: 112px; }
@@ -1505,7 +1513,6 @@
         <div class="popup-track-artist">Alexander Forbidden</div>
         <div class="popup-controls-row">
           <button class="btn-popup-play" id="popupPlayBtn" aria-label="Toggle audio playback">
-            <!-- Mastery SVG Vector Replacement for Play Icon Layout -->
             <svg id="playIconSvg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </button>
           <div class="volume-slider-box">
@@ -1536,7 +1543,7 @@
 <section class="hero">
   <!-- Clean, Authentic Giza Pyramid Triad Alignment Lattice Background Layer -->
   <div class="sacred-geometry">
-    <svg viewBox="0 0 1000 600" preserveAspectRatio="none">
+    <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYEnd meet">
       <!-- Khufu (Great Pyramid) Wireframe -->
       <polygon points="50,550 280,180 510,550" fill="none" stroke="currentColor" stroke-width="0.75"/>
       <line x1="280" y1="180" x2="280" y2="550" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3 3"/>
@@ -1739,7 +1746,7 @@
     <div class="sec-rule"></div>
     <span class="sec-name">Skills</span>
   </div>
-  <h2 class="reveal">What I <em>Bring</em></h2>
+  h2 class="reveal">What I <em>Bring</em></h2>
   <div class="skills-layout">
 
     <div class="skill-group reveal d1">
@@ -1958,7 +1965,7 @@
       <input type="hidden" name="_subject" value="New Portfolio Alignment Intent Captured">
       <input type="hidden" name="_honeypot" style="display:none">
 
-      <button type="submit" class="btn-submit">Dispatch Intent →</button>
+      <button type="submit" class="btn-submit">Ask and you shall receive →</button>
     </form>
 
     <!-- Sidebar Direct Channels Links -->
@@ -2017,7 +2024,7 @@
   </div>
 
   <div class="footer-bottom">
-    <span>&copy; <span id="footerYear">2026</span> Farouk Ashraf. All rights reserved. BTW, this whole page was vibecoded. How cool is that!</span>
+    <span>&copy; <span id="footerYear">2026</span> Farouk Ashraf. All rights reserved.</span>
     <!-- Dynamic Music Attribution Embedded Masterfully into Footer Meta Links -->
     <span class="footer-status">
       <span class="status-dot"></span> Background Ambiance: 
@@ -2205,12 +2212,10 @@
   function onPlayerStateChange(event) {
     if (event.data === YT.PlayerState.PLAYING) {
       inlineStateText.textContent = "Playing";
-      // Pure SVG markup swapping for geometric pause icon layout bars
       playIconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
       startVisualizerAnimation();
     } else {
       inlineStateText.textContent = "Paused";
-      // Pure SVG markup swapping for geometric play icon layout arrow
       playIconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
       stopVisualizerAnimation();
     }
