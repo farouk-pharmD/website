@@ -36,6 +36,7 @@
     font-weight: 300;
     overflow-x: hidden;
     transition: background 0.35s ease, color 0.35s ease;
+    position: relative;
   }
   body.has-custom-cursor { cursor: none; }
 
@@ -60,7 +61,19 @@
   .nav-menu-toggle,
   .timeline::before,
   .sec-rule,
-  .hobbies-row {
+  .hobbies-row,
+  .tech-manifesto,
+  .engine-container,
+  .bmca-visual,
+  .intersection-ring,
+  .sacred-geometry,
+  .contact-form-container,
+  .contact-input,
+  .contact-select,
+  .btn-submit,
+  .audio-node-wrapper,
+  .audio-visualizer-node,
+  .audio-popup-panel {
     transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
   }
 
@@ -76,8 +89,9 @@
   .hobby-desc,
   .sec-name,
   .contact-val,
-  .closing,
-  footer a {
+  .closing-signature,
+  footer a,
+  .manifesto-quote {
     transition: color 0.35s ease;
   }
 
@@ -127,7 +141,7 @@
     font-size: 1.05rem; font-style: italic;
     color: var(--ink); text-decoration: none; white-space: nowrap;
   }
-  .nav-links { display: flex; gap: clamp(0.7rem, 1.8vw, 1.8rem); list-style: none; }
+  .nav-links { display: flex; gap: clamp(0.7rem, 1.8vw, 1.8rem); list-style: none; align-items: center; }
   .nav-links a {
     font-size: clamp(0.6rem, 1.2vw, 0.72rem);
     letter-spacing: 0.15em; text-transform: uppercase;
@@ -140,6 +154,151 @@
   }
   .nav-links a:hover { color: var(--rust); }
   .nav-links a:hover::after { width: 100%; }
+  
+  /* ── AUDIO CONTROLLER & FLOATING POPUP SYSTEM ──── */
+  .audio-node-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  .audio-visualizer-node {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid var(--line);
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--rust-light);
+    user-select: none;
+  }
+  .audio-visualizer-node:hover {
+    border-color: var(--rust);
+    color: var(--rust);
+  }
+  .visualizer-waves-box {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    width: 18px;
+    height: 12px;
+  }
+  .visualizer-bar {
+    width: 2px;
+    height: 3px;
+    background: currentColor;
+    border-radius: 1px;
+    transform-origin: bottom;
+    transition: height 0.15s ease;
+  }
+  .audio-node-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Elegant Glassmorphism Popup Menu Panel */
+  .audio-popup-panel {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    width: 240px;
+    background: rgba(245, 240, 232, 0.96);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.2rem;
+    box-shadow: 0 16px 36px rgba(14, 13, 11, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    z-index: 200;
+  }
+  .audio-popup-panel.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .popup-track-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .popup-track-artist {
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: -0.2rem;
+  }
+  .popup-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-top: 1px solid rgba(14, 13, 11, 0.06);
+    padding-top: 0.8rem;
+  }
+  .btn-popup-play {
+    background: var(--ink);
+    border: none;
+    color: var(--paper);
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, color 0.3s;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .btn-popup-play:hover {
+    background: var(--rust);
+    transform: scale(1.05);
+  }
+  .btn-popup-play svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    fill: currentColor;
+    display: block;
+  }
+  .volume-slider-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+  }
+  .volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    background: var(--rust);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--rust);
+    transition: transform 0.2s;
+  }
+  .volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+  }
+
   .theme-toggle {
     width: 2.5rem;
     height: 2.5rem;
@@ -256,10 +415,13 @@
     min-height: 100svh;
     display: grid; grid-template-columns: 1fr 1fr;
     padding-top: 68px;
+    position: relative;
   }
   .hero-left {
     display: flex; flex-direction: column; justify-content: center;
     padding: clamp(3rem,8vw,7rem) clamp(1.5rem,4vw,4vw) clamp(3rem,8vw,7rem) clamp(2rem,8vw,8vw);
+    position: relative;
+    z-index: 5;
   }
   .hero-tag {
     display: inline-block;
@@ -318,28 +480,28 @@
     opacity: 0; animation: fadeIn 1.2s ease forwards 0.3s;
   }
   .hero-right-bg {
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; z-index: 2;
     background: radial-gradient(circle at 30% 40%, rgba(184,92,56,0.15), transparent 60%);
   }
-  .hero-glyph {
+  .Rx {
     position: absolute; top: clamp(1.5rem,4vw,3rem); right: clamp(1.5rem,4vw,3rem);
     font-family: 'Playfair Display', serif;
     font-size: clamp(5rem, 14vw, 14rem);
     font-style: italic; font-weight: 400;
-    color: transparent; -webkit-text-stroke: 1px rgba(184,92,56,0.2);
-    line-height: 1; pointer-events: none;
+    color: var(--rust-light); -webkit-text-stroke: 1px rgba(184,92,56,0.2);
+    line-height: 1; pointer-events: none; z-index: 2;
   }
-  .hero-portrait-wrap {
+  .portrait-wrap {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -60%);
-    z-index: 2;
+    z-index: 3;
   }
   @keyframes float {
     0%, 100% { transform: translateY(0px); box-shadow: 0 0 0 6px rgba(184,92,56,0.08), 0 20px 60px rgba(0,0,0,0.4); }
     50%       { transform: translateY(-12px); box-shadow: 0 0 0 6px rgba(184,92,56,0.08), 0 32px 80px rgba(0,0,0,0.3); }
   }
-  .hero-portrait {
+  .portrait {
     width: clamp(140px, 18vw, 220px);
     height: clamp(140px, 18vw, 220px);
     border-radius: 50%;
@@ -350,7 +512,7 @@
     display: block;
     animation: float 4s ease-in-out infinite;
   }
-  .hero-portrait-label {
+  .portrait-label {
     text-align: center;
     margin-top: 1rem;
     font-size: clamp(0.58rem, 0.9vw, 0.65rem);
@@ -359,7 +521,7 @@
     color: rgba(245,240,232,0.35);
   }
   .hero-stats {
-    position: relative; z-index: 2;
+    position: relative; z-index: 4;
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 1px; background: rgba(255,255,255,0.05);
   }
@@ -374,8 +536,21 @@
     color: rgba(245,240,232,0.4); margin-top: 0.4rem; display: block;
   }
 
+  /* ── GIZA TRIAD LATTICE (NESTED BACKGROUND LAYER) ── */
+  .sacred-geometry {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .sacred-geometry svg {
+    width: 100%;
+    height: 100%;
+  }
+
   /* ── SHARED SECTION STYLES ─────────────────────── */
-  section { padding: clamp(3rem,6.5vw,5.5rem) clamp(1.5rem,8vw,8vw); }
+  section { padding: clamp(3rem,6.5vw,5.5rem) clamp(1.5rem,8vw,8vw); position: relative; }
 
   .sec-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
   .sec-num { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--rust); font-style: italic; }
@@ -386,6 +561,7 @@
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.8rem, 4vw, 3.2rem);
     font-weight: 400; line-height: 1.15; margin-bottom: clamp(2rem,5vw,3.5rem);
+    position: relative; z-index: 5;
   }
   h2 em { font-style: italic; color: var(--rust); }
 
@@ -394,7 +570,10 @@
     background: var(--ink); color: var(--paper);
     display: grid; grid-template-columns: 1.3fr 1fr;
     gap: clamp(2rem,6vw,6rem); align-items: start;
+    position: relative;
+    overflow: hidden;
   }
+  .about-text { position: relative; z-index: 5; }
   .about h2 em { color: var(--rust-light); }
   .about .sec-num { color: var(--rust-light); }
   .about .sec-rule { background: rgba(255,255,255,0.1); }
@@ -411,7 +590,7 @@
     border-bottom: 1px solid rgba(255,255,255,0.08);
     margin: 1.8rem 0;
   }
-  .about-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .about-cards { display: flex; flex-direction: column; gap: 1rem; position: relative; z-index: 5; }
   .about-card {
     background: rgba(245,240,232,0.04);
     border: 1px solid rgba(245,240,232,0.07);
@@ -461,17 +640,16 @@
     }
   }
 
-  /* -- BMCA ROLE ---------------------------------- */
+  /* ── BMCA ROLE / OPERATIONS MATRIX ───────────────── */
   .bmca { background: var(--paper); }
   .bmca-grid {
     display: grid;
-    gap: clamp(2rem,6vw,6rem);
-    align-items: start;
+    gap: clamp(2rem,4vw,6rem);
+    align-items: center;
   }
   @media (min-width: 1025px) {
     .bmca-grid {
-      grid-template-columns: 1fr 1.3fr;
-      align-items: center;
+      grid-template-columns: 1.2fr 1fr;
     }
   }
   .bmca-intro {
@@ -480,7 +658,46 @@
     color: var(--muted);
     max-width: 700px;
     margin-bottom: 0;
+    position: relative; z-index: 5;
   }
+
+  /* Operational Intersection Ring Matrix Asset */
+  .bmca-visual {
+    width: 100%;
+    aspect-ratio: 1.4;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+  }
+  .intersection-ring {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-ops { transform: translate(-45px, -25px); border-color: var(--rust); }
+  .ring-market { transform: translate(45px, -25px); border-color: var(--muted); }
+  .ring-support { transform: translate(0, 45px); border-color: var(--rust-light); }
+  
+  .matrix-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    position: absolute;
+  }
+  .ring-ops .matrix-label { top: 20px; }
+  .ring-market .matrix-label { top: 20px; }
+  .ring-support .matrix-label { bottom: 20px; }
 
   /* ── SKILLS ────────────────────────────────────── */
   .skills { background: var(--ink); }
@@ -490,7 +707,7 @@
   .skills .sec-rule { background: rgba(255,255,255,0.1); }
   .skills .sec-name { color: rgba(245,240,232,0.4); }
 
-  .skills-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(2rem,5vw,4rem); }
+  .skills-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(2rem,5vw,4rem); position: relative; z-index: 5; }
 
   .skill-group h3 {
     font-family: 'Playfair Display', serif;
@@ -514,17 +731,20 @@
     }
   }
 
-  /* -- TECH SIDE ---------------------------------- */
+  .skill-narrative p {
+    font-size: clamp(0.82rem,1.3vw,0.92rem); line-height: 1.95; color: rgba(245,240,232,0.65); margin-bottom: 1.6rem; max-width: 860px;
+  }
+
+  /* -- TECH SIDE / CONVERGENCE --------------------- */
   .tech { background: var(--paper2); }
   .tech-grid {
     display: grid;
-    gap: clamp(2rem,6vw,6rem);
-    align-items: start;
+    gap: clamp(2rem,4vw,6rem);
+    align-items: center;
   }
   @media (min-width: 1025px) {
     .tech-grid {
-      grid-template-columns: 1fr 1.3fr;
-      align-items: center;
+      grid-template-columns: 1.2fr 1fr;
     }
   }
   .tech-copy {
@@ -532,16 +752,106 @@
     line-height: 1.95;
     color: var(--muted);
     max-width: 680px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.4rem;
+    text-align: justify;
+    position: relative; z-index: 5;
   }
   .tech-copy strong {
     color: var(--ink);
     font-weight: 500;
   }
 
+  /* Philosophy Callout Card */
+  .tech-manifesto {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--rust);
+    padding: 1.5rem 1.8rem;
+    margin-top: 2rem;
+    box-shadow: 0 10px 30px rgba(14, 13, 11, 0.02);
+    position: relative; z-index: 5;
+  }
+  .manifesto-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .manifesto-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  /* Dynamic CSS-Driven Horizontal Convergence Engine Visual Asset */
+  .engine-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 380px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    box-shadow: inset 0 0 40px rgba(14,13,11,0.02);
+    z-index: 5;
+  }
+  .orbit-track {
+    position: absolute;
+    border: 1px dashed var(--line);
+    border-radius: 50%;
+    animation: spin 30s linear infinite;
+  }
+  .track-outer { width: 84%; height: 84%; animation-duration: 50s; }
+  .track-mid { width: 62%; height: 62%; animation-duration: 30s; animation-direction: reverse; }
+  .track-inner { width: 40%; height: 40%; animation-duration: 16s; }
+
+  .engine-node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--rust);
+    border-radius: 50%;
+    top: -4px;
+    left: calc(50% - 4px);
+    box-shadow: 0 0 12px var(--rust-light);
+  }
+  .track-mid .engine-node {
+    background: var(--muted);
+    box-shadow: none;
+    top: auto; bottom: -4px;
+  }
+
+  .engine-core {
+    width: 70px;
+    height: 70px;
+    background: var(--paper2);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    box-shadow: 0 10px 25px rgba(14,13,11,0.05);
+  }
+  .engine-core svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--rust);
+  }
+
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+
   /* ── HOBBIES ───────────────────────────────────── */
   .hobbies { background: var(--paper); }
-  .hobbies-row { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--line); overflow: hidden; }
+  .hobbies-row { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--line); overflow: hidden; position: relative; z-index: 5; }
   .hobby { padding: clamp(1.5rem,3vw,2.5rem) clamp(1rem,2.5vw,2rem); border-right: 1px solid var(--line); transition: background 0.3s; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
   .hobby:last-child { border-right: none; }
   .hobby:hover { background: rgba(184,92,56,0.04); }
@@ -549,53 +859,266 @@
   .hobby-title { font-family: 'Playfair Display', serif; font-size: clamp(1rem,1.8vw,1.2rem); font-weight: 400; margin-bottom: 0.6rem; }
   .hobby-desc { font-size: clamp(0.78rem,1.2vw,0.83rem); line-height: 1.75; color: var(--muted); }
 
-  /* ── CONTACT ───────────────────────────────────── */
-  .contact { background: var(--ink); text-align: center; }
-  .contact .sec-meta { justify-content: center; align-items: center;}
-  .contact h2 { color: var(--paper); }
+  /* ── CONTACT & HIGH-END SELECTION FORM ─────────── */
+  .contact { background: var(--ink); text-align: left; overflow: hidden; position: relative; }
+  .contact .sec-meta { justify-content: flex-start; align-items: center; }
+  .contact h2 { color: var(--paper); margin-bottom: clamp(1.5rem, 3.5vw, 2.5rem); }
   .contact h2 em { color: var(--rust-light); }
   .contact .sec-num { color: var(--rust-light); }
   .contact .sec-rule { background: rgba(255,255,255,0.1); }
   .contact .sec-name { color: rgba(245,240,232,0.4); }
-  .contact-tagline { font-size: clamp(0.85rem,1.4vw,0.95rem); line-height: 1.8; color: rgba(245,240,232,0.5); max-width: 480px; margin: 0 auto clamp(1.5rem,3.5vw,2.5rem); }
-  .contact-row {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: rgba(255,255,255,0.05);
-    max-width: 760px; margin: 0 auto clamp(2.5rem,5vw,4rem);
-    transition: max-width 0.35s ease;
+  .contact-tagline { font-size: clamp(0.85rem,1.4vw,0.95rem); line-height: 1.8; color: rgba(245,240,232,0.5); max-width: 480px; margin-bottom: clamp(2rem, 4vw, 3.5rem); position: relative; z-index: 5; }
+  
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    position: relative;
+    z-index: 5;
   }
-  @media (min-width: 1025px) {
-    .contact-row {
-      max-width: 1100px;
-    }
-  }
-  .contact-item {
-    background: var(--ink); padding: clamp(1.2rem,2.5vw,1.8rem) 1.5rem;
-    text-decoration: none; color: var(--paper);
-    display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
-    transition: background 0.3s;
-  }
-  .contact-item:hover { background: rgba(184,92,56,0.12); }
-  .contact-icon { font-size: 1.3rem; }
-  .contact-type { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust-light); }
-  .contact-val { font-size: clamp(0.72rem,1.1vw,0.82rem); color: rgba(245,240,232,0.6); word-break: break-all; }
-  .closing {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.4rem,3.5vw,2.8rem);
-    font-style: italic; color: var(--paper);
-    line-height: 1.4; max-width: 580px; margin: 0 auto;
-  }
-  .closing span { color: var(--rust-light); font-style: normal; }
 
+  /* Pure Vector Canvas: Eye of Horus Watermark Background */
+  .horus-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.1;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .horus-canvas svg {
+    width: 85%;
+    height: 85%;
+    max-width: 580px;
+  }
+
+  /* Asymmetric Form Component Structure */
+  .contact-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .form-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rust-light);
+    font-weight: 500;
+  }
+  .contact-input, .contact-select {
+    width: 100%;
+    background: rgba(245, 240, 232, 0.03);
+    border: 1px solid rgba(245, 240, 232, 0.1);
+    color: var(--paper);
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.85rem 1.1rem;
+    outline: none;
+  }
+  .contact-input::placeholder {
+    color: rgba(245, 240, 232, 0.25);
+  }
+  .contact-input:focus, .contact-select:focus {
+    border-color: var(--rust-light);
+    background: rgba(245, 240, 232, 0.05);
+  }
+  
+  /* Styled Selector Field */
+  .contact-select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23d4856a' stroke-width='1.2'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1.2rem center;
+    padding-right: 2.5rem;
+  }
+  .contact-select option {
+    background: #0e0d0b;
+    color: #f5f0e8;
+  }
+
+  .btn-submit {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper);
+    border: none;
+    padding: 1rem 2.2rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .btn-submit:hover {
+    background: var(--rust-light);
+    color: #0e0d0b;
+  }
+
+  /* Direct Sidebar Info Links */
+  .contact-sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid rgba(245, 240, 232, 0.08);
+    padding-left: clamp(2rem, 4vw, 4rem);
+  }
+  .sidebar-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .sidebar-item {
+    text-decoration: none;
+    color: var(--paper);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .sidebar-item:hover .contact-val {
+    color: var(--rust-light);
+  }
+  .contact-val {
+    font-size: clamp(0.8rem, 1.2vw, 0.92rem);
+    color: rgba(245, 240, 232, 0.6);
+    word-break: break-all;
+  }
+
+  /* UPGRADED SIGNATURE COMPONENT */
+  .closing-signature {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    font-style: italic;
+    color: var(--paper);
+    line-height: 1.4;
+    max-width: 100%;
+    margin-top: 2.5rem;
+    letter-spacing: -0.01em;
+  }
+  .closing-signature span { 
+    color: var(--rust-light); 
+    font-style: normal; 
+    display: block;
+    margin-top: 0.2rem;
+  }
+
+  /* ── HIGH-END TYPOGRAPHIC FOOTER ───────────────── */
   footer {
     background: #080706;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
-    padding: 1.4rem 6vw;
-    font-size: clamp(0.6rem,1vw,0.68rem); letter-spacing: 0.1em;
     color: rgba(245,240,232,0.65);
+    padding: clamp(3rem, 6vw, 5rem) 6vw 2rem;
+    border-top: 1px solid var(--line);
+    position: relative;
   }
-  footer a { color: inherit; text-decoration: none; transition: color 0.3s; }
-  footer a:hover { color: var(--rust-light); }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(2, 1fr) 1.2fr;
+    gap: 2.5rem 1.5rem;
+    margin-bottom: clamp(3rem, 5vw, 4rem);
+    position: relative; z-index: 5;
+  }
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: #f1ebe3;
+  }
+  .footer-tagline {
+    font-size: 0.8rem;
+    color: var(--muted);
+    max-width: 220px;
+    line-height: 1.5;
+  }
+  .footer-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust-light);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+  .footer-links a, .footer-links span {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .footer-links a:hover {
+    color: var(--rust-light);
+  }
+  .col-right {
+    align-items: flex-start;
+    font-size: 0.8rem;
+  }
+  @media (min-width: 769px) {
+    .col-right { align-items: flex-end; text-align: right; }
+  }
+  .footer-email {
+    color: #f1ebe3;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(241,235,227,0.2);
+    padding-bottom: 2px;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .footer-email:hover {
+    color: var(--rust-light);
+    border-color: var(--rust-light);
+  }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(241,235,227,0.06);
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    position: relative; z-index: 5;
+  }
+  .footer-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--rust);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px var(--rust-light);
+  }
+
+  /* ── DARK MODE OVERRIDES COHERENCE ──────────────── */
   html[data-theme="dark"] body {
     background: #12100d;
     color: #f1ebe3;
@@ -612,7 +1135,12 @@
   html[data-theme="dark"] .tech-copy strong,
   html[data-theme="dark"] .bmca-point strong,
   html[data-theme="dark"] .timeline-role,
-  html[data-theme="dark"] .hobby-title {
+  html[data-theme="dark"] .hobby-title,
+  html[data-theme="dark"] .manifesto-quote,
+  html[data-theme="dark"] .sacred-geometry,
+  html[data-theme="dark"] .horus-canvas,
+  html[data-theme="dark"] .closing-signature,
+  html[data-theme="dark"] .popup-track-title {
     color: #f1ebe3;
   }
   html[data-theme="dark"] .nav-links a,
@@ -646,14 +1174,22 @@
   html[data-theme="dark"] .experience,
   html[data-theme="dark"] .bmca,
   html[data-theme="dark"] .tech,
-  html[data-theme="dark"] .hobbies {
+  html[data-theme="dark"] .hobbies,
+  html[data-theme="dark"] .tech-manifesto,
+  html[data-theme="dark"] .engine-container,
+  html[data-theme="dark"] .bmca-visual {
     background: #080706;
   }
   html[data-theme="dark"] .about,
   html[data-theme="dark"] .skills,
   html[data-theme="dark"] .contact,
-  html[data-theme="dark"] .hero-right {
+  html[data-theme="dark"] .hero-right,
+  html[data-theme="dark"] .engine-core,
+  html[data-theme="dark"] .contact-select option {
     background: #0d0b09;
+  }
+  html[data-theme="dark"] .audio-popup-panel {
+    background: #181511;
   }
   html[data-theme="dark"] .timeline::before,
   html[data-theme="dark"] .sec-rule,
@@ -662,8 +1198,19 @@
   html[data-theme="dark"] .tech-card,
   html[data-theme="dark"] .hobbies-row,
   html[data-theme="dark"] .hobby,
-  html[data-theme="dark"] nav {
+  html[data-theme="dark"] nav,
+  html[data-theme="dark"] .tech-manifesto,
+  html[data-theme="dark"] .engine-container,
+  html[data-theme="dark"] .orbit-track,
+  html[data-theme="dark"] .engine-core,
+  html[data-theme="dark"] .intersection-ring,
+  html[data-theme="dark"] .audio-popup-panel,
+  html[data-theme="dark"] .audio-visualizer-node {
     border-color: rgba(241,235,227,0.1);
+  }
+  html[data-theme="dark"] .btn-popup-play {
+    background: var(--paper);
+    color: var(--ink);
   }
   html[data-theme="dark"] .bmca-panel {
     background: rgba(241,235,227,0.035);
@@ -671,13 +1218,32 @@
   html[data-theme="dark"] .timeline-item::before {
     background: #181511;
   }
-  html[data-theme="dark"] .hobby:hover,
-  html[data-theme="dark"] .contact-item:hover {
+  html[data-theme="dark"] .hobby:hover {
     background: rgba(184,92,56,0.1);
   }
   html[data-theme="dark"] footer {
     background: #080706;
     color: rgba(241,235,227,0.65);
+  }
+
+  /* Dynamic light theme style adjustments for structural assets */
+  html[data-theme="light"] footer {
+    background: var(--paper2);
+    color: var(--ink);
+  }
+  html[data-theme="light"] .footer-logo,
+  html[data-theme="light"] .footer-email {
+    color: var(--ink);
+  }
+  html[data-theme="light"] .footer-email {
+    border-bottom-color: rgba(14,13,11,0.2);
+  }
+  html[data-theme="light"] .footer-bottom {
+    border-top-color: rgba(14,13,11,0.08);
+  }
+  html[data-theme="light"] .sacred-geometry,
+  html[data-theme="light"] .horus-canvas {
+    color: var(--rust);
   }
 
   /* ── ANIMATIONS ────────────────────────────────── */
@@ -698,9 +1264,13 @@
   @media (max-width: 1024px) {
     .about { grid-template-columns: 1fr; }
     .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .bmca-grid { grid-template-columns: 1fr; }
-    .tech-grid { grid-template-columns: 1fr; }
+    .bmca-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .tech-grid { grid-template-columns: 1fr; gap: 3rem; }
     .hobbies-row { grid-template-columns: repeat(3, 1fr); }
+    .contact-container { grid-template-columns: 1fr; gap: 4rem; }
+    .contact-sidebar { border-left: none; border-top: 1px solid rgba(245, 240, 232, 0.08); padding-left: 0; padding-top: 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 3rem 1.5rem; }
+    .col-brand { grid-column: 1 / -1; }
   }
 
   /* Tablet portrait / large mobile */
@@ -732,8 +1302,8 @@
       padding: 2rem 1.25rem 1.25rem;
       gap: 1.5rem;
     }
-    .hero-glyph { font-size: clamp(4rem, 18vw, 8rem); }
-    .hero-portrait-wrap {
+    .Rx { font-size: clamp(4rem, 18vw, 8rem); }
+    .portrait-wrap {
       position: relative;
       top: auto;
       left: auto;
@@ -743,7 +1313,7 @@
       align-items: center;
       margin: 0 auto;
     }
-    .hero-portrait {
+    .portrait {
       width: clamp(150px, 42vw, 210px);
       height: clamp(150px, 42vw, 210px);
     }
@@ -762,7 +1332,6 @@
     .hobby:nth-child(2n) { border-right: none; }
     .hobby:last-child { border-bottom: none; }
 
-    .contact-row { grid-template-columns: 1fr; max-width: 380px; }
     .about-cards { grid-template-columns: 1fr; }
   }
 
@@ -893,6 +1462,9 @@
     .stat-num { font-size: 1.1rem; }
     .stat-label { font-size: 0.48rem; letter-spacing: 0.1em; }
     section { padding: 3.5rem 5vw; }
+    .form-row { grid-template-columns: 1fr; gap: 1.8rem; }
+    .btn-submit { width: 100%; text-align: center; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
   }
 </style>
 </head>
@@ -901,16 +1473,48 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="ring"></div>
 
+<!-- Hidden YouTube Audio Player Target Shell Wrapper -->
+<div id="ytAudioPlayerFrame" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden; left:-9999px; top:-9999px;"></div>
+
 <nav>
   <a href="#" class="nav-logo">Farouk Ashraf</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
-    <li><a href="#bmca">BMCA</a></li>
+    <li><a href="#bmca">Current role</a></li>
     <li><a href="#skills"><span class="nav-label-full">Skills</span><span class="nav-label-short">Sk..</span></a></li>
-    <li><a href="#tech">Tech</a></li>
+    <li><a href="#tech">HealthTech</a></li>
     <li><a href="#hobbies">Hobbies</a></li>
     <li><a href="#contact">Contact</a></li>
+    
+    <!-- Persistent Asymmetric Rhythmic Audio Dropdown Wrapper -->
+    <li class="audio-node-wrapper">
+      <button class="audio-visualizer-node" id="ytAudioNode" type="button" aria-label="Toggle structural background stream">
+        <span class="visualizer-waves-box">
+          <span class="visualizer-bar" id="vBar1"></span>
+          <span class="visualizer-bar" id="vBar2"></span>
+          <span class="visualizer-bar" id="vBar3"></span>
+          <span class="visualizer-bar" id="vBar4"></span>
+        </span>
+        <span class="audio-node-label" id="audioNodeStatus">Listen</span>
+      </button>
+
+      <!-- Glassmorphism Dropdown Interface Panel -->
+      <div class="audio-popup-panel" id="audioPopup">
+        <div class="popup-track-title">Arabic Trap Mix 2020</div>
+        <div class="popup-track-artist">Alexander Forbidden</div>
+        <div class="popup-controls-row">
+          <button class="btn-popup-play" id="popupPlayBtn" aria-label="Toggle audio playback">
+            <!-- Mastery SVG Vector Replacement for Play Icon Layout -->
+            <svg id="playIconSvg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="volume-slider-box">
+            <span class="form-label" style="font-size:0.5rem; letter-spacing:0.1em;">Attenuation</span>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40" aria-label="Volume controller">
+          </div>
+        </div>
+      </div>
+    </li>
   </ul>
   <button class="nav-menu-toggle" id="navMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
     <span class="nav-menu-icon"><span></span></span>
@@ -922,7 +1526,7 @@
         <path d="M12 2.75v2.3M12 18.95v2.3M21.25 12h-2.3M5.05 12h-2.3M18.54 5.46l-1.63 1.63M7.09 16.91l-1.63 1.63M18.54 18.54l-1.63-1.63M7.09 7.09L5.46 5.46"/>
       </svg>
       <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="6.4"/>
+        <path d="M12 3a10 10 0 0 0-7.36 17.23 10 10 0 0 0 14.51 0A10 10 0 0 0 12 3zm0 18a8 8 0 0 1-5.89-13.78 8 8 0 0 1 11.78 0A8 8 0 0 1 12 21z"/>
       </svg>
     </span>
   </button>
@@ -930,6 +1534,26 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Clean, Authentic Giza Pyramid Triad Alignment Lattice Background Layer -->
+  <div class="sacred-geometry">
+    <svg viewBox="0 0 1000 600" preserveAspectRatio="none">
+      <!-- Khufu (Great Pyramid) Wireframe -->
+      <polygon points="50,550 280,180 510,550" fill="none" stroke="currentColor" stroke-width="0.75"/>
+      <line x1="280" y1="180" x2="280" y2="550" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3 3"/>
+      
+      <!-- Khafre Wireframe -->
+      <polygon points="380,550 560,240 740,550" fill="none" stroke="currentColor" stroke-width="0.75"/>
+      <line x1="560" y1="240" x2="560" y2="550" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3 3"/>
+      
+      <!-- Menkaure Wireframe -->
+      <polygon points="660,550 780,340 900,550" fill="none" stroke="currentColor" stroke-width="0.75"/>
+      <line x1="780" y1="340" x2="780" y2="550" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3 3"/>
+      
+      <!-- Astronomical Alignment Axis Line -->
+      <line x1="0" y1="550" x2="1000" y2="550" stroke="currentColor" stroke-width="1"/>
+    </svg>
+  </div>
+
   <div class="hero-left">
     <span class="hero-tag hero-reveal">Giza · Egypt <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" style="width:1.3em;height:0.87em;vertical-align:middle;display:inline-block;margin-left:0.3em;border-radius:2px;"><rect width="900" height="200" fill="#CE1126"/><rect y="200" width="900" height="200" fill="#fff"/><rect y="400" width="900" height="200" fill="#000"/><g transform="translate(450,300)"><path d="M0-60 L14 20 L-40-22 L40-22 L-14 20Z" fill="#C09300" transform="scale(0.9)"/></g></svg></span>
     <h1 class="hero-reveal">Farouk<br><em>Ashraf</em></h1>
@@ -944,9 +1568,9 @@
   </div>
   <div class="hero-right hero-reveal">
     <div class="hero-right-bg"></div>
-    <span class="hero-glyph">Rx</span>
-    <div class="hero-portrait-wrap">
-      <img class="hero-portrait" src="Assets/hero-portrait.jpg" alt="Farouk Ashraf">
+    <span class="Rx">Rx</span>
+    <div class="portrait-wrap">
+      <img class="portrait" src="Assets/portrait.jpg" alt="Farouk Ashraf">
     </div>
     <div class="hero-stats">
       <div class="stat">
@@ -978,7 +1602,7 @@
       "I've never believed a person can be reduced to a single title. We are mosaics — countless fragments of experience, memory, passion, and dreams."
     </div>
     <p class="reveal">I started my career in healthcare because I care about people, the healthcare system, and the details that shape whether support actually reaches someone. That same instinct now shapes my work in <strong style="color:var(--paper)">Axios international</strong>.</p>
-    <p class="reveal">On my first day as a Community pharmacist I asked myself a simple question. <strong style="color:var(--paper)">What is it that I can do differently?</strong> How can I move from implementing the standard of care to <strong style="color:var(--rust-light)">raising</strong> the standard of care. Because deep in my heart, I believe that people don't just need the best care possible right now, they need us to push forth the horizon of what is possible and what is economical.</p>
+    <p class="reveal">On my first day as a Community pharmacist I asked myself a simple question. <strong style="color:var(--paper)">What is it that I can do differently?</strong> How can I move from implementing the standard of care to <strong style="color:var(--rust-light)">raising</strong> the standard of care. Because deep in my heart, I believe that people don't just need the best care possible <strong><u>right now</u></strong>, they need us to push forth the horizon of what is possible and what is economical.</p>
     <p class="reveal">I believe that while my time as a Community Pharmacist was deeply valuable and impactful to me, that my current role as a BMCA coordinator @ Axios international may give me a fish-eye view of how to push the envelope of care further and further.</p>
     <p class="reveal">On my first day in Axios international, I watched a recorded speech made by the CEO of the company and something clicked in my brain, the impact, the vision, the mission, the tune was coming together for me. In that moment, I knew, I had to see the bigger picture, the macro.</p>
   </div>
@@ -1086,10 +1710,25 @@
     <span class="sec-name">Current Role</span>
   </div>
   <div class="bmca-grid">
-    <h2 class="reveal">BMCA at<br><em>Axios international</em></h2>
-    <p class="bmca-intro reveal">
-      In my role as a Business Monitoring & Competitive Advantage Coordinator at Axios International, I sit at the intersection of healthcare operations, market awareness, and practical decision support, and most importantly, I enjoy my work there!
-    </p>
+    <div>
+      <h2 class="reveal">BMCA at<br><em>Axios international</em></h2>
+      <p class="bmca-intro reveal">
+        In my role as a Business Monitoring & Competitive Advantage Coordinator at Axios International, I sit at the intersection of healthcare operations, market awareness, and practical decision support, and most importantly, I enjoy my work there!
+      </p>
+    </div>
+    
+    <!-- Operational Intersection Ring Matrix Asset -->
+    <div class="bmca-visual reveal d1">
+      <div class="intersection-ring ring-ops">
+        <span class="matrix-label">Operations</span>
+      </div>
+      <div class="intersection-ring ring-market">
+        <span class="matrix-label">Market Intel</span>
+      </div>
+      <div class="intersection-ring ring-support">
+        <span class="matrix-label">Decision Support</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1137,7 +1776,6 @@
         <span class="pill">Automation</span>
         <span class="pill">PowerShell, Fish, and Bash Scripting</span>
         <span class="pill">GNU / Linux</span>
-        <span class="pill">B connect software</span>
       </div>
     </div>
 
@@ -1152,12 +1790,12 @@
       </div>
     </div>
 
-    <div class="skill-group reveal d1" style="grid-column: 1 / -1; border-top: 1px solid rgba(245,240,232,0.07); padding-top: 2.5rem; margin-top: 1rem;">
+    <div class="skill-group reveal d1 skill-narrative" style="grid-column: 1 / -1; border-top: 1px solid rgba(245,240,232,0.07); padding-top: 2.5rem; margin-top: 1rem;">
       <h3>As a BMCA Coordinator — What do I Bring</h3>
-      <p style="font-size: clamp(0.82rem,1.3vw,0.92rem); line-height: 1.95; color: rgba(245,240,232,0.65); margin-bottom: 1.6rem; max-width: 860px;">
-        BMCA work rewards the same habits that made clinical training valuable for me: careful observation, disciplined documentation, and the ability to explain complex information without flattening it. At <strong style="color:var(--rust-light)">Axios International</strong>, I bring a healthcare-trained eye to business monitoring.
+      <p>
+        As a Business Monitoring and Competitive Advantage Coordinator, work rewards the same habits that made clinical training valuable for me: careful observation, disciplined documentation, and the ability to explain complex information without flattening it. At <strong style="color:var(--rust-light)">Axios International</strong>, I bring a healthcare-trained eye to business monitoring.
       </p>
-      <p style="font-size: clamp(0.82rem,1.3vw,0.92rem); line-height: 1.95; color: rgba(245,240,232,0.65); margin-bottom: 1.6rem; max-width: 860px;">
+      <p>
         My clinical background helps me understand the real-world meaning behind the smallest imperfections, while my technical side helps me build faster ways to monitor, develop, and communicate better ways to bring care where it counts. The result is practical intelligence: clear enough for action, detailed enough to be trusted.
       </p>
     </div>
@@ -1165,7 +1803,7 @@
   </div>
 </section>
 
-<!-- TECH SIDE -->
+<!-- TECH SIDE / CONVERGENCE -->
 <section class="tech" id="tech">
   <div class="sec-meta reveal">
     <span class="sec-num">05</span>
@@ -1173,17 +1811,40 @@
     <span class="sec-name">HealthTech</span>
   </div>
   <div class="tech-grid">
-    <h2 class="reveal">A Deep<br><em>Obsession</em></h2>
     <div>
+      <h2 class="reveal">A Deep<br><em>Obsession</em></h2>
       <p class="tech-copy reveal">
-        Deep in my core, I've always been a computer person: the kind who enjoys terminal user interfaces, controling my own systems, optimizing my workflows for maximum effeciency, hosting my own services, and the quiet elegance of making a machine do exactly what it should.
+        Deep in my core, I've always been a computer person. You know the stereotype about the kind of person who enjoys terminal user interfaces, controlling their own systems, optimizing workflows for maximum efficiency, hosting their own services, and the quiet pleasure of building software to solve problems just because I can.
       </p>
       <p class="tech-copy reveal d1">
-        By the way a lot of the tools I rely on everyday are part of <strong>my own software stack.</strong> Because it's not just a hobby for me; It's part of how I <strong style="color:var(--rust-light)">express myself to the world.</strong>
+        By the way, a lot of the tools I rely on every day are part of <strong>my own software stack.</strong> Because it's not just a hobby for me; it's part of how I <strong style="color:var(--rust-light)">express myself to the world.</strong>
       </p>
       <p class="tech-copy reveal d2">
-        The happy accident here is that tech and health are converging every single day more than the day before. It's a new day everyday with new ways to augment our ability to do more for patients with the same resources!
+        The happy accident here is that tech and health are converging every single day. For me, research has never been just about gathering data or analyzing trends in isolation; it is an intentional commitment to uncovering the hidden threads that connect complex ideas, bringing systematic clarity out of chaotic noise.
       </p>
+      <p class="tech-copy reveal d2">
+        As we step further into the era of artificial intelligence, I see AI not as a replacement for human ingenuity, but as its ultimate catalyst. By combining the rigorous depth of traditional research with the scaling power of intelligent models, we unlock the absolute freedom to think critically, create passionately, and ask the next great question.
+      </p>
+
+      <div class="tech-manifesto reveal d3">
+        <div class="manifesto-label">The Convergence Vision</div>
+        <div class="manifesto-quote">
+          "Man and machine marching hand in hand into the far far future :3"
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal d2" style="display: flex; align-items: center; justify-content: center;">
+      <div class="engine-container">
+        <div class="orbit-track track-outer"><div class="engine-node"></div></div>
+        <div class="orbit-track track-mid"><div class="engine-node"></div></div>
+        <div class="orbit-track track-inner"></div>
+        <div class="engine-core">
+          <svg viewBox="0 0 24 24">
+            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.39 18.95,16.54 17.29,18L15.87,16.59C17.19,15.41 18,13.8 18,12A6,6 0 0,0 12,6V4M12,8A4,4 0 0,1 16,12C16,13.2 15.47,14.28 14.62,15L13.21,13.59C13.7,13.23 14,12.65 14,12A2,2 0 0,0 12,10V8Z"/>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1232,37 +1893,139 @@
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
+  <!-- Clean, Blueprint Canvas Watermark: Eye of Horus -->
+  <div class="horus-canvas">
+    <svg viewBox="0 0 600 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M100,200 Q250,90 450,200 Q250,310 100,200 Z" />
+      <circle cx="260" cy="200" r="55" />
+      <circle cx="260" cy="200" r="22" fill="currentColor" opacity="0.3"/>
+      <path d="M120,110 Q260,60 460,130" stroke-width="2.5" />
+      <path d="M225,245 L225,340 Q270,350 310,310" />
+      <path d="M375,232 Q420,330 500,290" />
+    </svg>
+  </div>
+
   <div class="sec-meta reveal">
     <span class="sec-num">07</span>
     <div class="sec-rule"></div>
     <span class="sec-name">Contact</span>
   </div>
   <h2 class="reveal">Let's <em>Connect</em></h2>
-  <p class="contact-tagline reveal">Whether it's a professional opportunity, a collaboration, or just a good conversation — reach out.</p>
-  <div class="contact-row reveal">
-    <a href="https://www.linkedin.com/in/farouk-ashraf/" target="_blank" class="contact-item">
-      <span class="contact-icon">in</span>
-      <span class="contact-type">LinkedIn</span>
-      <span class="contact-val">farouk-ashraf</span>
-    </a>
-    <a href="tel:+201004911501" class="contact-item">
-      <span class="contact-icon">☎</span>
-      <span class="contact-type">Phone</span>
-      <span class="contact-val">+20 100 491 1501</span>
-    </a>
-    <a href="mailto:farouk.ashraf@proton.me" class="contact-item">
-      <span class="contact-icon">✉</span>
-      <span class="contact-type">Email</span>
-      <span class="contact-val">farouk.ashraf@proton.me</span>
-    </a>
+  <p class="contact-tagline reveal">Whether it's a professional opportunity, a data architecture project, or just a good conversation — select your arena and drop a line.</p>
+  
+  <div class="contact-container reveal">
+    <!-- Fully Functional Form Connected to Formspree Endpoint -->
+    <form class="contact-form-container" action="https://formspree.io/f/mvznvlkz" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" name="name" class="contact-input" placeholder="e.g., Jane Doe" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="_replyto" class="contact-input" placeholder="name@domain.com" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Scope of Interest</label>
+          <select name="scope" class="contact-select" required>
+            <option value="" disabled selected>Choose a workspace...</option>
+            <option value="Commisions">Commissioning a project? Abshir!</option>
+            <option value="Job offer">Offering me a job? How kind of you</option>
+            <option value="Friendly conversation">Want a friendly conversation? Let's Gooooo</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Urgency Space</label>
+          <select name="urgency" class="contact-select" required>
+            <option value="" disabled selected>Choose timelines...</option>
+            <option value="Immediate Catalyst">Immediate (Active Project)</option>
+            <option value="Future Horizon">Future Horizon (Planning Phase)</option>
+            <option value="Casual Dialogue">Casual Dialogue (No Pacing)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">The Manifesto / Message</label>
+        <input type="text" name="message" class="contact-input" placeholder="Better be something nice haha..." style="padding-bottom: 3rem;" required>
+      </div>
+
+      <!-- Hidden pipeline fields configuration -->
+      <input type="hidden" name="_subject" value="New Portfolio Alignment Intent Captured">
+      <input type="hidden" name="_honeypot" style="display:none">
+
+      <button type="submit" class="btn-submit">Dispatch Intent →</button>
+    </form>
+
+    <!-- Sidebar Direct Channels Links -->
+    <div class="contact-sidebar">
+      <div class="sidebar-block">
+        <div class="form-label" style="margin-bottom: -0.5rem;">Direct Channels</div>
+        
+        <a href="tel:+201004911501" class="sidebar-item">
+          <span class="contact-type">Phone Terminal</span>
+          <span class="contact-val">+20 100 491 1501</span>
+        </a>
+        
+        <a href="mailto:farouk.ashraf@proton.me" class="sidebar-item">
+          <span class="contact-type">Secure Mail</span>
+          <span class="contact-val">farouk.ashraf@proton.me</span>
+        </a>
+      </div>
+
+      <!-- Redesigned Typographic Manifesto Signature -->
+      <p class="closing-signature">"This is who I am.<br><span>And this is what I do.</span>"</p>
+    </div>
   </div>
-  <p class="closing reveal">"This is who I am.<br><span>And this is what I do.</span>"</p>
 </section>
 
-<footer>
-  <span>© 2026 Farouk Ashraf · PharmD</span>
-  <span>Giza, Egypt</span>
-  <a href="mailto:farouk.ashraf@proton.me">farouk.ashraf@proton.me</a>
+<!-- HIGH-END EDITORIAL FOOTER MAPS NATIVELY -->
+<footer class="reveal">
+  <div class="footer-grid">
+    <div class="footer-col col-brand">
+      <span class="footer-logo">Farouk Ashraf</span>
+      <p class="footer-tagline">Pushing forth the horizon of what is possible.</p>
+    </div>
+    
+    <div class="footer-col">
+      <span class="footer-label">Socials</span>
+      <ul class="footer-links">
+        <li><a href="https://x.com/grep_the_vibe">X</a></li>
+        <li><a href="https://www.facebook.com/faroukashraf01/">Facebook</a></li>
+        <li><a href="https://bsky.app/profile/fubarfarouk.bsky.social">BlueSky</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <span class="footer-label">TLDR; Who am I?</span>
+      <ul class="footer-links">
+        <li><span>PharmD Graduate</span></li>
+        <li><span>BMCA Coordinator</span></li>
+        <li><span>AI Systems Trainer</span></li>
+      </ul>
+    </div>
+
+    <div class="footer-col col-right">
+      <span class="footer-label">Location</span>
+      <span class="footer-val">Giza, Egypt</span>
+      <a href="mailto:farouk.ashraf@proton.me" class="footer-email">farouk.ashraf@proton.me</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; <span id="footerYear">2026</span> Farouk Ashraf. All rights reserved. BTW, this whole page was vibecoded. How cool is that!</span>
+    <!-- Dynamic Music Attribution Embedded Masterfully into Footer Meta Links -->
+    <span class="footer-status">
+      <span class="status-dot"></span> Background Ambiance: 
+      <a href="https://www.youtube.com/watch?v=pCfqB2nKi7A&list=PLg7IwUwqnBsDGrTeUiIC5K08YjO0Ogjcq" target="_blank" style="text-decoration: underline; color: inherit; font-size: inherit; margin-left: 2px;">
+        Alexander Forbidden — Arabic Trap Mix
+      </a>
+    </span>
+  </div>
 </footer>
 
 <script>
@@ -1345,7 +2108,7 @@
       requestAnimationFrame(tick);
     })();
 
-    document.querySelectorAll('a, button').forEach(el => {
+    document.querySelectorAll('a, button, select, input, .audio-visualizer-node, .volume-slider').forEach(el => {
       el.addEventListener('mouseenter', () => {
         cursor.style.width = cursor.style.height = '18px';
         ring.style.width   = ring.style.height   = '54px';
@@ -1380,6 +2143,123 @@
     });
   }, { threshold: 0.05 });
   document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
+
+  // Automated contextual data binding for footer timeline
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  /* ── INTERACTIVE AUTOMATED BACKGROUND AUDIO CONTROLLER EXECUTION ── */
+  let audioPlayer;
+  let visualizerInterval;
+  let audioAutoplayBootstrapped = false;
+
+  const audioTriggerNode = document.getElementById('ytAudioNode');
+  const popupContainer = document.getElementById('audioPopup');
+  const inlineStateText = document.getElementById('audioNodeStatus');
+  const popupPlayControl = document.getElementById('popupPlayBtn');
+  const playIconSvg = document.getElementById('playIconSvg');
+  const attenuationSlider = document.getElementById('volumeSlider');
+  const visualWaves = [
+    document.getElementById('vBar1'),
+    document.getElementById('vBar2'),
+    document.getElementById('vBar3'),
+    document.getElementById('vBar4')
+  ];
+
+  // Inject official standard asynchronous framework script for YouTube IFrame actions
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  function onYouTubeIframeAPIReady() {
+    audioPlayer = new YT.Player('ytAudioPlayerFrame', {
+      height: '1',
+      width: '1',
+      videoId: 'pCfqB2nKi7A',
+      playerVars: {
+        'autoplay': 0,
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'rel': 0,
+        'modestbranding': 1
+      },
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerReady() {
+    audioPlayer.setVolume(40);
+    document.body.addEventListener('click', bootstrapAutoplayStream, { once: true });
+  }
+
+  function bootstrapAutoplayStream() {
+    if (audioAutoplayBootstrapped || !audioPlayer) return;
+    audioPlayer.playVideo();
+    audioAutoplayBootstrapped = true;
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+      inlineStateText.textContent = "Playing";
+      // Pure SVG markup swapping for geometric pause icon layout bars
+      playIconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      startVisualizerAnimation();
+    } else {
+      inlineStateText.textContent = "Paused";
+      // Pure SVG markup swapping for geometric play icon layout arrow
+      playIconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      stopVisualizerAnimation();
+    }
+  }
+
+  function startVisualizerAnimation() {
+    if (visualizerInterval) clearInterval(visualizerInterval);
+    visualizerInterval = setInterval(() => {
+      visualWaves.forEach(bar => {
+        const bounceMetric = Math.floor(Math.random() * 12) + 3;
+        bar.style.height = bounceMetric + 'px';
+      });
+    }, 120);
+  }
+
+  function stopVisualizerAnimation() {
+    clearInterval(visualizerInterval);
+    visualWaves.forEach(bar => {
+      bar.style.height = '3px';
+    });
+  }
+
+  audioTriggerNode.addEventListener('click', (e) => {
+    e.stopPropagation();
+    popupContainer.classList.toggle('is-active');
+  });
+
+  popupContainer.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener('click', () => {
+    popupContainer.classList.remove('is-active');
+  });
+
+  popupPlayControl.addEventListener('click', () => {
+    if (!audioPlayer) return;
+    const currentState = audioPlayer.getPlayerState();
+    if (currentState === YT.PlayerState.PLAYING) {
+      audioPlayer.pauseVideo();
+    } else {
+      audioPlayer.playVideo();
+    }
+  });
+
+  attenuationSlider.addEventListener('input', (e) => {
+    if (!audioPlayer) return;
+    audioPlayer.setVolume(e.target.value);
+  });
 </script>
 </body>
 </html>
