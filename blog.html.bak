@@ -51,17 +51,6 @@
   <h2>Recent <em>Thoughts</em></h2>
   
   <div class="blog-grid">
-    <a href="blogs/how-computers-taught-me-what-its-like-to-be-human.html" class="blog-card reveal">
-      <div class="blog-card-meta">
-        <span class="blog-date">July 19, 2026</span>
-        <span class="blog-tag">Personal</span>
-      </div>
-      <h3>How computers taught me what it's like to be human</h3>
-      <p class="blog-excerpt">
-        People think man and maachine somehow cannot work together but I believe computers have shown me my true self and how to be the best human being I can be..
-      </p>
-      <span class="blog-read-more">Read Entry →</span>
-    </a>
     <!-- Blog Card 1 -->
     <a href="blogs/the-alignment-problem.html" class="blog-card reveal">
       <div class="blog-card-meta">

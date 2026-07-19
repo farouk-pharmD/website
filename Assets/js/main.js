@@ -1,13 +1,12 @@
 (() => {
-  // Determine root path prefix and page info
   const rootPath = document.body.getAttribute('data-root-path') || './';
-  const isHomePage = window.location.pathname.endsWith('index.html') ||
-    window.location.pathname === '/' ||
-    window.location.pathname.endsWith('/') ||
-    (!window.location.pathname.includes('.html') && !window.location.pathname.includes('/blogs/'));
-  const isBlogPage = window.location.pathname.includes('blog.html') || window.location.pathname.includes('/blogs/');
+  const path = window.location.pathname;
+  const isHomePage = path.endsWith('index.html') ||
+    path === '/' ||
+    path.endsWith('/') ||
+    (!path.includes('.html') && !path.includes('/blogs/'));
+  const isBlogPage = path.includes('blog.html') || path.includes('/blogs/');
 
-  // Generate dynamic links depending on where the user is
   const aboutLink = isHomePage ? '#about' : `${rootPath}index.html#about`;
   const experienceLink = isHomePage ? '#experience' : `${rootPath}index.html#experience`;
   const bmcaLink = isHomePage ? '#bmca' : `${rootPath}index.html#bmca`;
@@ -17,50 +16,53 @@
   const contactLink = isHomePage ? '#contact' : `${rootPath}index.html#contact`;
   const blogLink = `${rootPath}blog.html`;
   const blogActive = isBlogPage ? 'active' : '';
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // 1. Inject Shared HTML Structure
   const injectComponents = () => {
-    // Prepend Cursor Custom Elements
     if (!document.getElementById('cursor')) {
       const cursor = document.createElement('div');
       cursor.className = 'cursor';
       cursor.id = 'cursor';
+      cursor.setAttribute('aria-hidden', 'true');
       document.body.prepend(cursor);
     }
     if (!document.getElementById('ring')) {
       const ring = document.createElement('div');
       ring.className = 'cursor-ring';
       ring.id = 'ring';
+      ring.setAttribute('aria-hidden', 'true');
       document.body.prepend(ring);
     }
 
-    // Prepend Terminal Overlay
     if (!document.getElementById('terminalOverlay')) {
       const terminal = document.createElement('div');
       terminal.id = 'terminalOverlay';
       terminal.className = 'terminal-overlay';
+      terminal.setAttribute('role', 'dialog');
+      terminal.setAttribute('aria-label', 'System terminal easter egg');
+      terminal.setAttribute('aria-hidden', 'true');
       terminal.innerHTML = `
         <div class="term-content">
           <div class="term-header">V1_OS v2.4.1 (TTY1)</div>
           <div class="term-line">> INITIALIZING SYSTEM HANDSHAKE LOG SEQUENCE...</div>
           <div class="term-line">> /VAR/LOG MOUNTED // SOURCE FIELD TRACKING INTERFACE...</div>
-          <div class="term-line" style="margin-top: 1.5rem;">> <span class="term-cursor"></span></div>
+          <div class="term-line term-line-prompt">> <span class="term-cursor"></span></div>
         </div>
       `;
       document.body.prepend(terminal);
     }
 
-    // Prepend Hidden YouTube audio target frame
     if (!document.getElementById('ytAudioPlayerFrame')) {
       const ytFrame = document.createElement('div');
       ytFrame.id = 'ytAudioPlayerFrame';
-      ytFrame.style = 'position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; overflow:hidden; left:-9999px; top:-9999px;';
+      ytFrame.className = 'yt-audio-frame';
+      ytFrame.setAttribute('aria-hidden', 'true');
       document.body.prepend(ytFrame);
     }
 
-    // Prepend Navigation Bar
     if (!document.querySelector('nav')) {
       const nav = document.createElement('nav');
+      nav.setAttribute('aria-label', 'Primary');
       nav.innerHTML = `
         <a href="${rootPath}index.html" class="nav-logo"><span class="logo-word logo-normal">Farouk</span> <span class="logo-word logo-italic">Ashraf</span></a>
         <ul class="nav-links">
@@ -74,10 +76,9 @@
           <li><a href="${blogLink}" class="${blogActive}">Blog</a></li>
         </ul>
 
-        <!-- Persistent Asymmetric Rhythmic Audio Dropdown Wrapper -->
         <div class="audio-node-wrapper audio-floating-controller">
-          <button class="audio-visualizer-node" id="ytAudioNode" type="button" aria-label="Toggle structural background stream">
-            <span class="visualizer-waves-box">
+          <button class="audio-visualizer-node" id="ytAudioNode" type="button" aria-label="Open background audio controls" aria-expanded="false" aria-controls="audioPopup">
+            <span class="visualizer-waves-box" aria-hidden="true">
               <span class="visualizer-bar" id="vBar1"></span>
               <span class="visualizer-bar" id="vBar2"></span>
               <span class="visualizer-bar" id="vBar3"></span>
@@ -86,17 +87,16 @@
             <span class="audio-node-label" id="audioNodeStatus">Listen</span>
           </button>
 
-          <!-- Glassmorphism Dropdown Interface Panel -->
-          <div class="audio-popup-panel" id="audioPopup">
+          <div class="audio-popup-panel" id="audioPopup" role="dialog" aria-label="Background audio" aria-hidden="true">
             <div class="popup-track-title">Arabic Trap Mix 2020</div>
             <div class="popup-track-artist">Alexander Forbidden</div>
             <div class="popup-controls-row">
-              <button class="btn-popup-play" id="popupPlayBtn" aria-label="Toggle audio playback">
-                <svg id="playIconSvg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <button class="btn-popup-play" id="popupPlayBtn" type="button" aria-label="Play background audio">
+                <svg id="playIconSvg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
               </button>
               <div class="volume-slider-box">
-                <span class="form-label" style="font-size:0.5rem; letter-spacing:0.1em;">Attenuation</span>
-                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40" aria-label="Volume controller">
+                <label class="form-label volume-label" for="volumeSlider">Attenuation</label>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="40" aria-label="Volume">
               </div>
             </div>
           </div>
@@ -120,7 +120,6 @@
       document.body.prepend(nav);
     }
 
-    // Append Editorial Footer
     if (!document.querySelector('footer')) {
       const footer = document.createElement('footer');
       footer.className = 'reveal';
@@ -134,9 +133,9 @@
           <div class="footer-col">
             <span class="footer-label">Socials</span>
             <ul class="footer-links">
-              <li><a href="https://x.com/grep_the_vibe" target="_blank">X</a></li>
-              <li><a href="https://www.facebook.com/faroukashraf01/" target="_blank">Facebook</a></li>
-              <li><a href="https://bsky.app/profile/fubarfarouk.bsky.social" target="_blank">BlueSky</a></li>
+              <li><a href="https://x.com/grep_the_vibe" target="_blank" rel="noopener noreferrer">X</a></li>
+              <li><a href="https://www.facebook.com/faroukashraf01/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+              <li><a href="https://bsky.app/profile/fubarfarouk.bsky.social" target="_blank" rel="noopener noreferrer">BlueSky</a></li>
             </ul>
           </div>
 
@@ -159,8 +158,8 @@
         <div class="footer-bottom">
           <span>&copy; <span id="footerYear">2026</span> Farouk Ashraf. All rights reserved.</span>
           <span class="footer-status">
-            <span class="status-dot"></span> Background Ambiance: 
-            <a href="https://www.youtube.com/watch?v=pCfqB2nKi7A&list=PLg7IwUwqnBsDGrTeUiIC5K08YjO0Ogjcq" target="_blank" style="text-decoration: underline; color: inherit; font-size: inherit; margin-left: 2px;">
+            <span class="status-dot" aria-hidden="true"></span> Background Ambiance: 
+            <a href="https://www.youtube.com/watch?v=pCfqB2nKi7A&list=PLg7IwUwqnBsDGrTeUiIC5K08YjO0Ogjcq" target="_blank" rel="noopener noreferrer" class="footer-track-link">
               Alexander Forbidden — Arabic Trap Mix
             </a>
           </span>
@@ -169,20 +168,19 @@
       document.body.appendChild(footer);
     }
 
-    // Append Back to Top Button
     if (!document.getElementById('backToTop')) {
       const bttBtn = document.createElement('button');
       bttBtn.id = 'backToTop';
       bttBtn.className = 'back-to-top';
+      bttBtn.type = 'button';
       bttBtn.setAttribute('aria-label', 'Return to top');
-      bttBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>`;
+      bttBtn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>`;
       document.body.appendChild(bttBtn);
     }
   };
 
   injectComponents();
 
-  // 2. Initialize Interactive Elements and Event Handlers
   const nav = document.querySelector('nav');
   const navMenuToggle = document.getElementById('navMenuToggle');
   const themeToggle = document.getElementById('themeToggle');
@@ -229,8 +227,7 @@
     if (window.innerWidth > 768) setMobileMenu(false);
   });
 
-  // Terminal Easter Egg DATA STORAGE ARRAY & LOGIC
-  const terminal_Log_Buffer = [
+  const terminalLogBuffer = [
     `----------------------------------------------`,
     `COMBAT ID STATE:   V1 // SECTOR ID: HELL`,
     `DEPTH LAYER:       VIOLENCE`,
@@ -267,63 +264,76 @@
   const terminalOverlayNode = document.getElementById('terminalOverlay');
 
   function streamTerminalBuffer() {
-    if (currentLineIndex < terminal_Log_Buffer.length && terminalOverlayNode.classList.contains('is-open')) {
+    if (currentLineIndex < terminalLogBuffer.length && terminalOverlayNode.classList.contains('is-open')) {
       const logNode = document.createElement('div');
       logNode.className = 'term-line';
-      logNode.innerText = terminal_Log_Buffer[currentLineIndex];
-      logNode.style.animation = 'termReveal 0.12s forwards';
-
+      logNode.innerText = terminalLogBuffer[currentLineIndex];
+      if (!prefersReducedMotion.matches) {
+        logNode.style.animation = 'termReveal 0.12s forwards';
+      }
       terminalOverlayNode.firstElementChild.insertBefore(logNode, terminalOverlayNode.firstElementChild.lastElementChild);
-
       currentLineIndex++;
-      setTimeout(streamTerminalBuffer, 120);
+      setTimeout(streamTerminalBuffer, prefersReducedMotion.matches ? 0 : 120);
     } else {
       terminalTypingActive = false;
     }
   }
 
+  function setTerminalOpen(open) {
+    terminalOverlayNode.classList.toggle('is-open', open);
+    terminalOverlayNode.setAttribute('aria-hidden', String(!open));
+    if (open && !terminalTypingActive) {
+      terminalTypingActive = true;
+      streamTerminalBuffer();
+    }
+  }
+
   document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target.isContentEditable) {
       return;
     }
 
+    if (e.key === 'Escape' && terminalOverlayNode.classList.contains('is-open')) {
+      setTerminalOpen(false);
+      return;
+    }
     if (e.key === '`') {
-      if (!terminalOverlayNode.classList.contains('is-open')) {
-        terminalOverlayNode.classList.add('is-open');
-        if (!terminalTypingActive) {
-          terminalTypingActive = true;
-          streamTerminalBuffer();
-        }
-      } else {
-        terminalOverlayNode.classList.remove('is-open');
-      }
+      setTerminalOpen(!terminalOverlayNode.classList.contains('is-open'));
     }
   });
 
-  // Back to Top Button Logic
   const backToTopBtn = document.getElementById('backToTop');
+  let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-      backToTopBtn.classList.add('is-visible');
-    } else {
-      backToTopBtn.classList.remove('is-visible');
-    }
-  });
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      backToTopBtn.classList.toggle('is-visible', window.scrollY > 500);
+      scrollTicking = false;
+    });
+  }, { passive: true });
   backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
   });
 
-  // Custom cursor setup
-  if (window.matchMedia('(pointer: fine)').matches) {
+  // Custom cursor — fine pointers only; pauses when tab is hidden
+  if (window.matchMedia('(pointer: fine)').matches && !prefersReducedMotion.matches) {
     document.body.classList.add('has-custom-cursor');
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('ring');
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let rx = mx, ry = my;
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let rx = mx;
+    let ry = my;
     let visible = false;
+    let cursorRaf = 0;
+
+    const interactiveSelector = 'a, button, select, input, textarea, .audio-visualizer-node, .volume-slider, .back-to-top, label';
 
     document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
+      mx = e.clientX;
+      my = e.clientY;
       cursor.style.left = mx + 'px';
       cursor.style.top = my + 'px';
       if (!visible) {
@@ -339,54 +349,62 @@
       ring.classList.remove('is-visible');
     });
 
-    (function tick() {
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest(interactiveSelector)) {
+        cursor.classList.add('is-hover');
+        ring.classList.add('is-hover');
+      }
+    });
+
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest(interactiveSelector) && !e.relatedTarget?.closest?.(interactiveSelector)) {
+        cursor.classList.remove('is-hover');
+        ring.classList.remove('is-hover');
+      }
+    });
+
+    function tickCursor() {
+      if (document.hidden) {
+        cursorRaf = 0;
+        return;
+      }
       rx += (mx - rx) * 0.12;
       ry += (my - ry) * 0.12;
       ring.style.left = rx + 'px';
       ring.style.top = ry + 'px';
-      requestAnimationFrame(tick);
-    })();
-
-    const updateCursorHoverBindings = () => {
-      document.querySelectorAll('a, button, select, input, .audio-visualizer-node, .volume-slider, .back-to-top').forEach(el => {
-        // Remove existing to avoid duplicates
-        el.removeEventListener('mouseenter', growCursor);
-        el.removeEventListener('mouseleave', shrinkCursor);
-
-        el.addEventListener('mouseenter', growCursor);
-        el.addEventListener('mouseleave', shrinkCursor);
-      });
-    };
-
-    function growCursor() {
-      cursor.style.width = cursor.style.height = '18px';
-      ring.style.width = ring.style.height = '54px';
+      cursorRaf = requestAnimationFrame(tickCursor);
     }
 
-    function shrinkCursor() {
-      cursor.style.width = cursor.style.height = '10px';
-      ring.style.width = ring.style.height = '36px';
+    function ensureCursorLoop() {
+      if (!cursorRaf && !document.hidden) {
+        cursorRaf = requestAnimationFrame(tickCursor);
+      }
     }
 
-    updateCursorHoverBindings();
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (cursorRaf) cancelAnimationFrame(cursorRaf);
+        cursorRaf = 0;
+      } else {
+        ensureCursorLoop();
+      }
+    });
 
-    // MutationObserver to bind dynamically added elements in future
-    const observer = new MutationObserver(updateCursorHoverBindings);
-    observer.observe(document.body, { childList: true, subtree: true });
+    ensureCursorLoop();
   }
 
-  // Scroll reveal tracking configuration
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      } else {
-        e.target.classList.remove('visible');
+  // Scroll reveal — animate once
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  /* ── TECH SECTION ORBITAL ENGINE SCROLL TRACKING ── */
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ── TECH SECTION ORBITAL ENGINE ── */
   const techSection = document.querySelector('.tech');
   const techGrid = document.querySelector('.tech-grid');
   const techRightCol = document.querySelector('.tech-right');
@@ -394,9 +412,9 @@
 
   if (techSection && techGrid && techRightCol && techEngineTracker) {
     const desktopQuery = window.matchMedia('(min-width: 1025px)');
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let currentOffset = 0;
     let targetOffset = 0;
+    let techRaf = 0;
 
     function computeTargetOffset() {
       if (!desktopQuery.matches) {
@@ -409,33 +427,55 @@
       const gridTop = window.scrollY + gridRect.top;
       const desiredOffset = window.scrollY + ((window.innerHeight - trackerRect.height) / 2) - gridTop;
       const maxOffset = Math.max(0, techGrid.offsetHeight - techEngineTracker.offsetHeight);
-
       targetOffset = Math.min(Math.max(desiredOffset, 0), maxOffset);
     }
 
     function trackTechEngine() {
+      if (document.hidden) {
+        techRaf = 0;
+        return;
+      }
       computeTargetOffset();
-      if (reducedMotionQuery.matches) {
+      if (prefersReducedMotion.matches) {
         currentOffset = targetOffset;
       } else {
         currentOffset += (targetOffset - currentOffset) * 0.1;
       }
       if (Math.abs(targetOffset - currentOffset) < 0.05) currentOffset = targetOffset;
       techEngineTracker.style.transform = `translate3d(0, ${currentOffset}px, 0)`;
-      requestAnimationFrame(trackTechEngine);
+      techRaf = requestAnimationFrame(trackTechEngine);
     }
 
-    requestAnimationFrame(trackTechEngine);
+    function ensureTechLoop() {
+      if (!techRaf && !document.hidden && desktopQuery.matches) {
+        techRaf = requestAnimationFrame(trackTechEngine);
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (techRaf) cancelAnimationFrame(techRaf);
+        techRaf = 0;
+      } else {
+        ensureTechLoop();
+      }
+    });
 
     desktopQuery.addEventListener('change', () => {
       if (!desktopQuery.matches) {
+        if (techRaf) cancelAnimationFrame(techRaf);
+        techRaf = 0;
         currentOffset = 0;
         targetOffset = 0;
         techEngineTracker.style.transform = 'translate3d(0, 0, 0)';
+      } else {
+        ensureTechLoop();
       }
     });
+
+    ensureTechLoop();
   }
-  // Hero section lifecycle mapping
+
   const heroObserver = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -450,10 +490,12 @@
   const yearEl = document.getElementById('footerYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  /* ── INTERACTIVE AUTOMATED BACKGROUND AUDIO CONTROLLER EXECUTION ── */
-  let audioPlayer;
-  let visualizerInterval;
-  let audioAutoplayBootstrapped = false;
+  /* ── BACKGROUND AUDIO (lazy YouTube load) ── */
+  let audioPlayer = null;
+  let visualizerInterval = null;
+  let youtubeApiLoading = false;
+  let youtubeApiReady = false;
+  let pendingPlay = false;
 
   const audioTriggerNode = document.getElementById('ytAudioNode');
   const popupContainer = document.getElementById('audioPopup');
@@ -468,82 +510,133 @@
     document.getElementById('vBar4')
   ];
 
-  // Expose standard globally expected callback for YouTube API
-  window.onYouTubeIframeAPIReady = function () {
-    audioPlayer = new YT.Player('ytAudioPlayerFrame', {
-      height: '1',
-      width: '1',
-      videoId: 'pCfqB2nKi7A',
-      playerVars: {
-        'autoplay': 0,
-        'controls': 0,
-        'disablekb': 1,
-        'fs': 0,
-        'rel': 0,
-        'modestbranding': 1
-      },
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
-      }
-    });
-  };
-
-  // Load YouTube Player API
-  const tag = document.createElement('script');
-  tag.src = "https://www.youtube.com/iframe_api";
-  const firstScriptTag = document.getElementsByTagName('script')[0];
-  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-  function onPlayerReady() {
-    if (audioPlayer && typeof audioPlayer.setVolume === 'function') {
-      audioPlayer.setVolume(40);
-    }
-    document.body.addEventListener('click', bootstrapAutoplayStream, { once: true });
-  }
-
-  function bootstrapAutoplayStream() {
-    if (audioAutoplayBootstrapped || !audioPlayer) return;
-    if (typeof audioPlayer.playVideo === 'function') {
-      audioPlayer.playVideo();
-      audioAutoplayBootstrapped = true;
-    }
-  }
-
-  function onPlayerStateChange(event) {
-    if (event.data === YT.PlayerState.PLAYING) {
-      inlineStateText.textContent = "Playing";
-      playIconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-      startVisualizerAnimation();
-    } else {
-      inlineStateText.textContent = "Paused";
-      playIconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
-      stopVisualizerAnimation();
-    }
+  function setPlayIcon(playing) {
+    if (!playIconSvg) return;
+    playIconSvg.innerHTML = playing
+      ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+      : '<path d="M8 5v14l11-7z"/>';
+    popupPlayControl.setAttribute('aria-label', playing ? 'Pause background audio' : 'Play background audio');
   }
 
   function startVisualizerAnimation() {
+    if (prefersReducedMotion.matches) return;
     if (visualizerInterval) clearInterval(visualizerInterval);
     visualizerInterval = setInterval(() => {
       visualWaves.forEach(bar => {
-        if (bar) {
-          const bounceMetric = Math.floor(Math.random() * 12) + 3;
-          bar.style.height = bounceMetric + 'px';
-        }
+        if (bar) bar.style.height = (Math.floor(Math.random() * 12) + 3) + 'px';
       });
     }, 120);
   }
 
   function stopVisualizerAnimation() {
     clearInterval(visualizerInterval);
+    visualizerInterval = null;
     visualWaves.forEach(bar => {
       if (bar) bar.style.height = '3px';
     });
   }
 
+  function onPlayerReady() {
+    if (audioPlayer && typeof audioPlayer.setVolume === 'function') {
+      audioPlayer.setVolume(Number(attenuationSlider?.value || 40));
+    }
+    if (pendingPlay && typeof audioPlayer.playVideo === 'function') {
+      audioPlayer.playVideo();
+      pendingPlay = false;
+    }
+  }
+
+  function onPlayerStateChange(event) {
+    if (!window.YT) return;
+    if (event.data === YT.PlayerState.PLAYING) {
+      inlineStateText.textContent = 'Playing';
+      setPlayIcon(true);
+      startVisualizerAnimation();
+    } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+      inlineStateText.textContent = event.data === YT.PlayerState.ENDED ? 'Listen' : 'Paused';
+      setPlayIcon(false);
+      stopVisualizerAnimation();
+    }
+  }
+
+  function createPlayer() {
+    if (audioPlayer || !window.YT || !window.YT.Player) return;
+    audioPlayer = new YT.Player('ytAudioPlayerFrame', {
+      height: '1',
+      width: '1',
+      videoId: 'pCfqB2nKi7A',
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        rel: 0,
+        modestbranding: 1,
+        playsinline: 1
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange
+      }
+    });
+  }
+
+  function loadYouTubeApi() {
+    if (youtubeApiReady) {
+      createPlayer();
+      return;
+    }
+    if (youtubeApiLoading) return;
+    youtubeApiLoading = true;
+
+    const previous = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (typeof previous === 'function') previous();
+      youtubeApiReady = true;
+      createPlayer();
+    };
+
+    if (window.YT && window.YT.Player) {
+      youtubeApiReady = true;
+      createPlayer();
+      return;
+    }
+
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.async = true;
+    document.head.appendChild(tag);
+  }
+
+  function requestPlay() {
+    pendingPlay = true;
+    if (audioPlayer && typeof audioPlayer.playVideo === 'function') {
+      audioPlayer.playVideo();
+      pendingPlay = false;
+      return;
+    }
+    inlineStateText.textContent = 'Loading…';
+    loadYouTubeApi();
+  }
+
+  function togglePlayback() {
+    if (!audioPlayer || typeof audioPlayer.getPlayerState !== 'function') {
+      requestPlay();
+      return;
+    }
+    const state = audioPlayer.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      audioPlayer.pauseVideo();
+    } else {
+      audioPlayer.playVideo();
+    }
+  }
+
   function setAudioPopup(open) {
     popupContainer.classList.toggle('is-active', open);
+    popupContainer.setAttribute('aria-hidden', String(!open));
     document.body.classList.toggle('audio-popup-open', open);
+    audioTriggerNode.setAttribute('aria-expanded', String(open));
   }
 
   audioTriggerNode.addEventListener('click', (e) => {
@@ -559,41 +652,40 @@
     setAudioPopup(false);
   });
 
-  popupPlayControl.addEventListener('click', () => {
-    if (!audioPlayer) return;
-    const currentState = audioPlayer.getPlayerState();
-    if (currentState === YT.PlayerState.PLAYING) {
-      audioPlayer.pauseVideo();
-    } else {
-      audioPlayer.playVideo();
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popupContainer.classList.contains('is-active')) {
+      setAudioPopup(false);
     }
+  });
+
+  popupPlayControl.addEventListener('click', () => {
+    togglePlayback();
   });
 
   attenuationSlider.addEventListener('input', (e) => {
-    if (!audioPlayer) return;
-    audioPlayer.setVolume(e.target.value);
+    if (audioPlayer && typeof audioPlayer.setVolume === 'function') {
+      audioPlayer.setVolume(Number(e.target.value));
+    }
   });
 
-  // 3. Page Loader & Smooth Page Transition Manager
+  // Page loader
   const loaderNode = document.getElementById('pageLoader');
 
-  // Dismiss loader on page load
   const dismissLoader = () => {
-    if (loaderNode) {
-      setTimeout(() => {
-        loaderNode.classList.add('is-hidden');
-      }, 700); // Gives the logo reveal animation enough time to display beautifully
-    }
+    if (!loaderNode) return;
+    const delay = prefersReducedMotion.matches ? 0 : 280;
+    setTimeout(() => {
+      loaderNode.classList.add('is-hidden');
+      loaderNode.setAttribute('aria-hidden', 'true');
+    }, delay);
   };
 
-  // Run on load
   if (document.readyState === 'complete') {
     dismissLoader();
   } else {
     window.addEventListener('load', dismissLoader);
   }
 
-  // Intercept click on relative local links to animate loader fade-in before navigating
   document.addEventListener('click', (e) => {
     const anchor = e.target.closest('a');
     if (!anchor) return;
@@ -601,7 +693,6 @@
     const href = anchor.getAttribute('href');
     const target = anchor.getAttribute('target');
 
-    // Skip helper links, external links, hashes, tel/mailto, and new tab links
     if (!href ||
       href.startsWith('#') ||
       href.startsWith('mailto:') ||
@@ -612,33 +703,31 @@
       return;
     }
 
-    // Do not intercept hash navigation on the same page
     const currentPath = window.location.pathname;
     const cleanHref = href.split('#')[0];
 
-    // If we're clicking a section anchor link on the same page, let it scroll naturally
     if (cleanHref === '' ||
       ((cleanHref === 'index.html' || cleanHref.endsWith('/index.html')) &&
         (currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/')))) {
       return;
     }
 
-    // Otherwise, perform smooth transition!
     e.preventDefault();
     if (loaderNode) {
       loaderNode.classList.remove('is-hidden');
+      loaderNode.setAttribute('aria-hidden', 'false');
       setTimeout(() => {
         window.location.href = href;
-      }, 400); // Matches transition fade-in duration
+      }, prefersReducedMotion.matches ? 0 : 320);
     } else {
       window.location.href = href;
     }
   });
 
-  // Handle browser back-forward cache (BFCache) show
   window.addEventListener('pageshow', (event) => {
     if (event.persisted && loaderNode) {
       loaderNode.classList.add('is-hidden');
+      loaderNode.setAttribute('aria-hidden', 'true');
     }
   });
 })();

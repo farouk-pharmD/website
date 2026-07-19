@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="shortcut icon" type="image/x-icon" href="../pharmacy.ico">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog Template — Farouk Ashraf</title>
+  <meta name="description" content="Template for new essays on Mein Lounge.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="author" content="Farouk Ashraf">
+  <link rel="icon" type="image/x-icon" href="../pharmacy.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="../Assets/js/theme-preloader.js"></script>
   <link rel="stylesheet" href="../Assets/css/style.css">
 </head>
 <body data-root-path="../">
 
-<div id="pageLoader" class="page-loader">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div id="pageLoader" class="page-loader" aria-hidden="true">
   <div class="loader-content">
     <span class="loader-logo">Farouk Ashraf</span>
     <div class="loader-spinner-bar"></div>
   </div>
 </div>
 
-<section class="hero blog-hero" style="min-height: 50svh; display: flex; flex-direction: column; justify-content: flex-end;">
-  <div class="hero-left" style="max-width: 800px; padding-top: 6rem;">
+<main id="main">
+
+<article>
+<section class="hero blog-hero blog-post-hero">
+  <div class="hero-left blog-post-hero-inner">
     <a href="../blog.html" class="blog-post-back">← Back to Lounge</a>
     <span class="hero-tag">Category</span>
-    <h1 style="font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 1.2rem;">Title of the Blog Post</h1>
-    <div style="font-size: 0.72rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase;">
+    <h1 class="blog-post-title">Title of the Blog Post</h1>
+    <div class="blog-post-meta">
       Published on June 15, 2026 — Written by Farouk Ashraf
     </div>
   </div>
 </section>
 
-<section class="blog-content-container" style="padding-top: 4rem; padding-bottom: 6rem;">
+<section class="blog-content-container">
   <div class="blog-content-body">
     <p>
       This is a template file that you can copy to write new blog posts. This body is styled with premium editorial typography (using DM Sans for readability and Playfair Display for emphasis).
@@ -49,6 +59,9 @@
     </p>
   </div>
 </section>
+</article>
+
+</main>
 
 <script src="../Assets/js/main.js"></script>
 </body>
